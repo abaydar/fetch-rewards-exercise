@@ -1,26 +1,23 @@
 import { useState } from "react";
 import axios from "axios";
 
-interface LoginProps {
-    setIsAuthenticated: (value: boolean) => void;
-}
-
-export const Login = ({ setIsAuthenticated }: LoginProps) => {
+export const Login = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const api = axios.create({
         baseURL: "https://frontend-take-home-service.fetch.com",
         withCredentials: true,
     })
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const userData = {
             name,
             email
         }
-        console.log(userData)
+
         try {
             const response = await api.post("/auth/login", userData)
             setIsAuthenticated(true);
@@ -30,9 +27,20 @@ export const Login = ({ setIsAuthenticated }: LoginProps) => {
         }
     }
 
+    const handleLogout = async (event: React.FormEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        try {
+            const response = await api.post("/auth/logout")
+            setIsAuthenticated(false)
+            console.log("Logout response: ", response.data)
+        } catch (error) {
+            console.error("Logout failed: ", error);
+        }
+    }
+
     const handleInputChange = (event: React.FormEvent<HTMLInputElement>) => {
         const target = event.target as HTMLInputElement;
-        
+
         if (target.id === "name") {
             setName(target.value)
         }
@@ -42,7 +50,12 @@ export const Login = ({ setIsAuthenticated }: LoginProps) => {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <>
+        {isAuthenticated ? 
+        <button
+            onClick={handleLogout}
+        >Log Out</button> :
+        (<form onSubmit={handleLogin} className="flex flex-col gap-4">
             <h2 className="text-xl">Please Login: </h2>
             <div>
                 <label className="text-left">Name: </label>
@@ -51,7 +64,7 @@ export const Login = ({ setIsAuthenticated }: LoginProps) => {
                     type="text"
                     id="name"
                     onChange={handleInputChange}
-                />
+                    />
             </div>
             <div>
                 <label className="text-left">Email: </label>
@@ -60,9 +73,12 @@ export const Login = ({ setIsAuthenticated }: LoginProps) => {
                     type="text"
                     id="email"
                     onChange={handleInputChange}
-                />
+                    />
             </div>
             <button type="submit">Login</button>
-        </form>
+        </form>)
+        }
+        
+        </>
     )
 };
