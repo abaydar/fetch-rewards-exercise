@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { AuthContext } from "../providers/AuthProvider";
 
-export const Login = () => {
+const Login = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext)
+    const navigate = useNavigate();
 
     const api = axios.create({
         baseURL: "https://frontend-take-home-service.fetch.com",
@@ -12,7 +15,7 @@ export const Login = () => {
     })
 
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
+        event.preventDefault();
         const userData = {
             name,
             email
@@ -22,6 +25,7 @@ export const Login = () => {
             const response = await api.post("/auth/login", userData)
             setIsAuthenticated(true);
             console.log("Login response:", response.data);
+            navigate("/search")
         } catch (error) {
             console.error('Login failed: ', error);
         }
@@ -82,3 +86,5 @@ export const Login = () => {
         </>
     )
 };
+
+export default Login;
