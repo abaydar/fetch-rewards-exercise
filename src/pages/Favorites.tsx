@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import DogCard from "../components/DogCard";
 import { FavoritesContext } from "../providers/FavoritesProvider";
 import axios from "axios";
+import { Button } from "@radix-ui/themes";
 
 
 const Favorites = () => {
@@ -32,9 +33,9 @@ const Favorites = () => {
     return (
         <>
             <h2>Favorite Dogs</h2>
-            <button
+            <Button
                 onClick={() => generateMatch(dogIds)}
-            >Generate Match</button>
+            >Generate Match</Button>
             {favorites.length ? (
                 favorites.map((dog) => (
                     <DogCard key={dog.id} dog={dog} />

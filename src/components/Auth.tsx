@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../providers/AuthProvider";
+import { Button } from "@radix-ui/themes";
 
 const Auth = () => {
     const [name, setName] = useState('');
@@ -56,9 +57,9 @@ const Auth = () => {
     return (
         <>
         {isAuthenticated ? 
-        <button
+        <Button
             onClick={handleLogout}
-        >Log Out</button> :
+        >Log Out</Button> :
         (<form onSubmit={handleLogin} className="flex flex-col gap-4">
             <h2 className="text-xl">Please Login: </h2>
             <div>
@@ -79,7 +80,7 @@ const Auth = () => {
                     onChange={handleInputChange}
                     />
             </div>
-            <button type="submit">Login</button>
+            <Button type="submit">Login</Button>
         </form>)
         }
         

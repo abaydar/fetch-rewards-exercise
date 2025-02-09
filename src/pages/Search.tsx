@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import DogCard from "../components/DogCard";
+import { Button } from "@radix-ui/themes";
 
 export interface Dog {
     id: string;
@@ -109,16 +110,16 @@ const Search = () => {
                 </select>
             </div>
             <div>
-                {pageNum > 1 && <button
+                {pageNum > 1 && <Button
                     onClick={(() => setPageNum((currPageNum) => currPageNum - 1))}
                     disabled={pageNum === 1}
                 >
                     Previous
-                </button>}
+                </Button>}
                     <span>{pageNum}</span>
-                <button onClick={() => setPageNum((currPageNum) => currPageNum + 1)}>
+                <Button onClick={() => setPageNum((currPageNum) => currPageNum + 1)}>
                     Next
-                </button>
+                </Button>
             </div>
             {!isLoading && dogs.map((dog) => (
                 <ul>

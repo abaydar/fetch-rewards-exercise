@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Dog } from "../pages/Search";
 import { FavoritesContext } from "../providers/FavoritesProvider";
 import { useLocation } from "react-router-dom";
+import { Button } from "@radix-ui/themes";
 
 interface DogCardProps {
     dog: Dog;
@@ -22,25 +23,25 @@ const DogCard = ({ dog }: DogCardProps) => {
             <p>Location: {dog.zip_code}</p>
             {!isFavoritesPage && (
                 isFavorite ? (
-                    <button
+                    <Button
                         onClick={() => removeFromFavorites(dog)}
                     >
                         Remove from Favorites
-                    </button>
+                    </Button>
                 ): (
-                    <button
+                    <Button
                         onClick={() => addToFavorites(dog)}
                     >
                         Add to Favorites
-                    </button>
+                    </Button>
                 )
             )}
             {isFavoritesPage && (
-                    <button
+                    <Button
                         onClick={() => removeFromFavorites(dog)}
                     >
                         Remove from Favorites
-                    </button>
+                    </Button>
                 )}
         </li>
     )
