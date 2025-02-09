@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../providers/AuthProvider";
 
-const Login = () => {
+const Auth = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext)
@@ -87,4 +87,4 @@ const Login = () => {
     )
 };
 
-export default Login;
+export default Auth;

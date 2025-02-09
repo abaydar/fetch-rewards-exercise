@@ -1,10 +1,10 @@
-import Login from '../components/Login'
+import Auth from '../components/Auth'
 
 const Home = () => {
   return (
       <>
         <div className="card">
-          <Login />
+          <Auth />
         </div>
       </>
   )
