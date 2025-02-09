@@ -13,8 +13,8 @@ export const AuthContext = createContext<AuthContextType>({
 })
 
 interface AuthProviderProps {
-    children: ReactNode;
-  }
+  children: ReactNode;
+}
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
 const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -22,7 +22,7 @@ const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
 return (
     <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
-    {children}
+      {children}
     </AuthContext.Provider>
 );
 };

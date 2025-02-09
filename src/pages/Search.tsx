@@ -40,7 +40,6 @@ const Search = () => {
             })
             setDogs(response.data)
             setIsLoading(false);
-            console.log('dogDetails: ', response.data);
         } catch (error) {
             console.error('Error fetching Dog Details: ', error);
         }
@@ -53,7 +52,7 @@ const Search = () => {
                     size: 10,
                     from: (pageNum - 1) * 10,
                     sort: sort,
-                    breeds: [breedFilter],
+                    breeds: breedFilter ? [breedFilter] : [],
                 },
                 withCredentials: true,
             });
@@ -89,6 +88,7 @@ const Search = () => {
                         setPageNum(1)
                     }}
                 >
+                    <option value={""}>All Breeds</option>
                     {breeds.map((breed) => (
                         <option key={breed} value={breed}>
                             {breed}
@@ -123,7 +123,9 @@ const Search = () => {
                 </button>
             </div>
             {!isLoading && dogs.map((dog) => (
-                <DogCard key={dog.id} dog={dog}/>
+                <ul>
+                    <DogCard key={dog.id} dog={dog}/>
+                </ul>
             ))}
         </>
     )
