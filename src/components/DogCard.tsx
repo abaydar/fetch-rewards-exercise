@@ -6,16 +6,17 @@ import { Button } from "@radix-ui/themes";
 
 interface DogCardProps {
     dog: Dog;
+    hideRemoveBtn?: boolean
 }
 
-const DogCard = ({ dog }: DogCardProps) => {
+const DogCard = ({ dog, hideRemoveBtn = false}: DogCardProps) => {
     const { favorites, addToFavorites, removeFromFavorites } = useContext(FavoritesContext);
     const isFavorite = favorites.some((fav) => fav.id === dog.id);
     const location = useLocation();
     const isFavoritesPage = location.pathname === '/favorites'
 
     return (
-        <li>
+        <li className="text-stone-900 list-none">
             <img src={dog.img} alt={dog.breed} />
             <h3>{dog.name}</h3>
             <p>Age: {dog.age}</p>
@@ -36,7 +37,7 @@ const DogCard = ({ dog }: DogCardProps) => {
                     </Button>
                 )
             )}
-            {isFavoritesPage && (
+            {isFavoritesPage && hideRemoveBtn && (
                     <Button
                         onClick={() => removeFromFavorites(dog)}
                     >
