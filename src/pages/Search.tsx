@@ -1,7 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import DogCard from "../components/DogCard";
-import Auth from "../components/Auth";
 
 export interface Dog {
     id: string;
@@ -78,7 +77,6 @@ const Search = () => {
 
     return (
         <>
-            <Auth />
             <div>
                 <label>Filter by Breed: </label>
                 <select
