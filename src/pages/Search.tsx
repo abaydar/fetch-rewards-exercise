@@ -1,7 +1,9 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import DogCard from "../components/DogCard";
+import Auth from "../components/Auth";
 
-interface Dog {
+export interface Dog {
     id: string;
     img: string;
     name: string;
@@ -14,9 +16,23 @@ const Search = () => {
     const [dogs, setDogs] = useState<Dog[]>([]);
     const [dogIds, setDogIds] = useState<string[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [breeds, setBreeds] = useState<string[]>([]);
+    const [breedFilter, setBreedFilter] = useState<string>("");
+    const [sort, setSort] = useState<string>("breed:asc");
+    const [pageNum, setPageNum] = useState<number>(1);
+
+    const getBreeds = async () => {
+        try {
+            const response = await axios.get('https://frontend-take-home-service.fetch.com/dogs/breeds', {
+                withCredentials: true
+            })
+            setBreeds(response.data);
+        } catch (error) {
+            console.error('Error fetching dog breeds: ', error);
+        }
+    }
 
     const getDogDetails = async (dogIds: string[]) => {
-        console.log('fetching details for dog ids: ', dogIds)
         try {
             const response = await axios.post('https://frontend-take-home-service.fetch.com/dogs', dogIds, {
                 headers: { 'Content-Type': 'application/json' },
@@ -24,6 +40,7 @@ const Search = () => {
             })
             setDogs(response.data)
             setIsLoading(false);
+            console.log('dogDetails: ', response.data);
         } catch (error) {
             console.error('Error fetching Dog Details: ', error);
         }
@@ -33,8 +50,10 @@ const Search = () => {
         try {
             const response = await axios.get('https://frontend-take-home-service.fetch.com/dogs/search', {
                 params: {
-                size: 25,
-                sort: 'breed:asc',
+                    size: 10,
+                    from: (pageNum - 1) * 10,
+                    sort: sort,
+                    breeds: [breedFilter],
                 },
                 withCredentials: true,
             });
@@ -45,8 +64,12 @@ const Search = () => {
     }
 
     useEffect(() => {
+        getBreeds();
+    }, []);
+
+    useEffect(() => {
         getDogs();
-    }, [])
+    }, [breedFilter, sort, pageNum])
 
     useEffect(() => {
         if (dogIds.length > 0) {
@@ -56,7 +79,52 @@ const Search = () => {
 
     return (
         <>
-            this is the seach component
+            <Auth />
+            <div>
+                <label>Filter by Breed: </label>
+                <select
+                    value={breedFilter}
+                    onChange={(e) => {
+                        setBreedFilter(e.target.value)
+                        setPageNum(1)
+                    }}
+                >
+                    {breeds.map((breed) => (
+                        <option key={breed} value={breed}>
+                            {breed}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            <div>
+                <label>Sort by Breed Name:</label>
+                <select
+                    value={sort}
+                    onChange={
+                        (e) => {
+                            setSort(e.target.value)
+                            setPageNum(1)
+                    }}
+                >
+                    <option value="breed:asc">Ascending</option>
+                    <option value="breed:desc">Decending</option>
+                </select>
+            </div>
+            <div>
+                {pageNum > 1 && <button
+                    onClick={(() => setPageNum((currPageNum) => currPageNum - 1))}
+                    disabled={pageNum === 1}
+                >
+                    Previous
+                </button>}
+                    <span>{pageNum}</span>
+                <button onClick={() => setPageNum((currPageNum) => currPageNum + 1)}>
+                    Next
+                </button>
+            </div>
+            {!isLoading && dogs.map((dog) => (
+                <DogCard key={dog.id} dog={dog}/>
+            ))}
         </>
     )
 }
