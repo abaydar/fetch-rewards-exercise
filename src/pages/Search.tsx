@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import DogCard from "../components/DogCard";
+import { useNavigate } from "react-router";
 
 export interface Dog {
     id: string;
@@ -19,6 +20,7 @@ const Search = () => {
     const [breedFilter, setBreedFilter] = useState<string>("");
     const [sort, setSort] = useState<string>("breed:asc");
     const [pageNum, setPageNum] = useState<number>(1);
+    const navigate = useNavigate();
 
     const getBreeds = async () => {
         try {
@@ -78,68 +80,81 @@ const Search = () => {
     const allBreeds = breedFilter === "All Breeds" || breedFilter === "";
 
     return (
-        <div className="p-4 space-y-4">
-            <div className="flex flex-col sm:flex-row items-center gap-2">
-                <label className="font-semibold">Filter by Breed: </label>
-                <select
-                    className="border border-gray-300 rounded-md p-2"
-                    value={breedFilter}
-                    onChange={(e) => {
-                        setBreedFilter(e.target.value)
-                        setPageNum(1)
-                    }}
-                >
-                    <option value={""}>All Breeds</option>
-                    {breeds.map((breed) => (
-                        <option key={breed} value={breed}>
-                            {breed}
-                        </option>
-                    ))}
-                </select>
-            </div>
-            {allBreeds && <div className="flex flex-col sm:flex-row items-center gap-2">
-                <label className="font-semibold">Sort by Breed Name:</label>
-                <select
-                    className="border border-gray-300 rounded-md p-2"
-                    value={sort}
-                    onChange={
-                        (e) => {
-                            setSort(e.target.value)
+        <>
+            {dogs.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-64">
+                    <p className="text-gray-700 mb-4">No results found. Please log in to search for dogs.</p>
+                    <button 
+                        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                        onClick={() => navigate("/")}
+                    >
+                        Go to Login
+                    </button>
+                </div>
+        ) : (
+            <div className="p-4 space-y-4">
+                <div className="flex flex-col sm:flex-row items-center gap-2">
+                    <label className="font-semibold">Filter by Breed: </label>
+                    <select
+                        className="border border-gray-300 rounded-md p-2"
+                        value={breedFilter}
+                        onChange={(e) => {
+                            setBreedFilter(e.target.value)
                             setPageNum(1)
-                    }}
-                >
-                    <option value="breed:asc">Ascending</option>
-                    <option value="breed:desc">Decending</option>
-                </select>
-            </div>}
+                        }}
+                    >
+                        <option value={""}>All Breeds</option>
+                        {breeds.map((breed) => (
+                            <option key={breed} value={breed}>
+                                {breed}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                {allBreeds && <div className="flex flex-col sm:flex-row items-center gap-2">
+                    <label className="font-semibold">Sort by Breed Name:</label>
+                    <select
+                        className="border border-gray-300 rounded-md p-2"
+                        value={sort}
+                        onChange={
+                            (e) => {
+                                setSort(e.target.value)
+                                setPageNum(1)
+                        }}
+                    >
+                        <option value="breed:asc">Ascending</option>
+                        <option value="breed:desc">Decending</option>
+                    </select>
+                </div>}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {!isLoading && dogs.map((dog) => (
-                    <DogCard key={dog.id} dog={dog}/>
-                ))}
-            </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {!isLoading && dogs.map((dog) => (
+                        <DogCard key={dog.id} dog={dog}/>
+                    ))}
+                </div>
 
-            <div className="flex items-center justify-center gap-4">
-                <button
-                    onClick={(() => setPageNum((currPageNum) => currPageNum - 1))}
-                    disabled={pageNum === 1}
-                    className={`px-4 py-2 rounded-md ${
-                        pageNum === 1
-                            ? "bg-transparent text-gray-400 cursor-default"
-                            : "bg-blue-500 text-white hover:bg-blue-600"
-                    }`}
-                >
-                    Previous
-                </button>
-                    <span className="font-semibold">{pageNum}</span>
-                <button
-                    onClick={() => setPageNum((currPageNum) => currPageNum + 1)}
-                    className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
-                >
-                    Next
-                </button>
-            </div>
-        </div>
+                <div className="flex items-center justify-center gap-4">
+                    <button
+                        onClick={(() => setPageNum((currPageNum) => currPageNum - 1))}
+                        disabled={pageNum === 1}
+                        className={`px-4 py-2 rounded-md ${
+                            pageNum === 1
+                                ? "bg-transparent text-gray-400 cursor-default"
+                                : "bg-green-500 text-white hover:bg-green-600"
+                        }`}
+                    >
+                        Previous
+                    </button>
+                        <span className="font-semibold">{pageNum}</span>
+                    <button
+                        onClick={() => setPageNum((currPageNum) => currPageNum + 1)}
+                        className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 disabled:opacity-50"
+                    >
+                        Next
+                    </button>
+                </div>
+            </div>)}
+        </>
     )
 }
 

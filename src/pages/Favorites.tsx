@@ -10,6 +10,7 @@ const Favorites = () => {
     const { favorites } = useContext(FavoritesContext);
     const [dogIds, setDogIds] = useState<string[]>([]);
     const [matchedDog, setMatchedDog] = useState<Dog | null>(null)
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const findMatchedDog = (id: string) => {
         return favorites.find((dog) => dog.id === id);
@@ -25,8 +26,13 @@ const Favorites = () => {
             if (dogMatch) {
                 setMatchedDog(dogMatch);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error generating match: ', error);
+            if (error.response?.status === 401) {
+                setErrorMessage("You must be logged in to generate a match. Please log in and try again.");
+            } else {
+                setErrorMessage("Something went wrong. Please try again.");
+            }
         }
     }
 
@@ -42,6 +48,11 @@ const Favorites = () => {
                 className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                 onClick={() => generateMatch(dogIds)}
             >Generate Match</button>
+
+            {errorMessage && (
+                <p className="text-red-500 font-semibold mt-2">{errorMessage}</p>
+            )}
+
             <div className="m-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {favorites.length ? (
                     favorites.map((dog) => (
