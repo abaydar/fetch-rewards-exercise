@@ -76,11 +76,14 @@ const Search = () => {
         }
     }, [dogIds])
 
+    const allBreeds = breedFilter === "All Breeds" || breedFilter === "";
+
     return (
-        <>
-            <div>
-                <label>Filter by Breed: </label>
+        <div className="p-4 space-y-4">
+            <div className="flex flex-col sm:flex-row items-center gap-2">
+                <label className="font-semibold">Filter by Breed: </label>
                 <select
+                    className="border border-gray-300 rounded-md p-2"
                     value={breedFilter}
                     onChange={(e) => {
                         setBreedFilter(e.target.value)
@@ -95,9 +98,10 @@ const Search = () => {
                     ))}
                 </select>
             </div>
-            <div>
-                <label>Sort by Breed Name:</label>
+            {allBreeds && <div className="flex flex-col sm:flex-row items-center gap-2">
+                <label className="font-semibold">Sort by Breed Name:</label>
                 <select
+                    className="border border-gray-300 rounded-md p-2"
                     value={sort}
                     onChange={
                         (e) => {
@@ -108,25 +112,33 @@ const Search = () => {
                     <option value="breed:asc">Ascending</option>
                     <option value="breed:desc">Decending</option>
                 </select>
-            </div>
-            <div>
-                {pageNum > 1 && <Button
+            </div>}
+            <div className="flex items-center justify-center gap-4">
+                <Button
                     onClick={(() => setPageNum((currPageNum) => currPageNum - 1))}
                     disabled={pageNum === 1}
+                    className={`px-4 py-2 rounded-md ${
+                        pageNum === 1
+                            ? "bg-transparent text-gray-400 cursor-default"
+                            : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
                 >
                     Previous
-                </Button>}
-                    <span>{pageNum}</span>
-                <Button onClick={() => setPageNum((currPageNum) => currPageNum + 1)}>
+                </Button>
+                    <span className="font-semibold">{pageNum}</span>
+                <Button
+                    onClick={() => setPageNum((currPageNum) => currPageNum + 1)}
+                    className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
+                >
                     Next
                 </Button>
             </div>
-            {!isLoading && dogs.map((dog) => (
-                <ul>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {!isLoading && dogs.map((dog) => (
                     <DogCard key={dog.id} dog={dog}/>
-                </ul>
-            ))}
-        </>
+                ))}
+            </div>
+        </div>
     )
 }
 

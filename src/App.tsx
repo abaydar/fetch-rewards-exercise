@@ -5,6 +5,7 @@ import Search from './pages/Search'
 import { AuthProvider } from './providers/AuthProvider'
 import { FavoritesProvider } from './providers/FavoritesProvider'
 import Favorites from './pages/Favorites'
+import Header from './components/Header'
 
 function App() {
 
@@ -12,6 +13,7 @@ function App() {
     <AuthProvider>
       <FavoritesProvider>
         <Router>
+          <Header />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<Search />} />
