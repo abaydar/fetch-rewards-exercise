@@ -49,8 +49,8 @@ const Search = () => {
         try {
             const response = await axios.get('https://frontend-take-home-service.fetch.com/dogs/search', {
                 params: {
-                    size: 10,
-                    from: (pageNum - 1) * 10,
+                    size: 20,
+                    from: (pageNum - 1) * 20,
                     sort: sort,
                     breeds: breedFilter ? [breedFilter] : [],
                 },
@@ -113,6 +113,13 @@ const Search = () => {
                     <option value="breed:desc">Decending</option>
                 </select>
             </div>}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {!isLoading && dogs.map((dog) => (
+                    <DogCard key={dog.id} dog={dog}/>
+                ))}
+            </div>
+
             <div className="flex items-center justify-center gap-4">
                 <Button
                     onClick={(() => setPageNum((currPageNum) => currPageNum - 1))}
@@ -132,11 +139,6 @@ const Search = () => {
                 >
                     Next
                 </Button>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {!isLoading && dogs.map((dog) => (
-                    <DogCard key={dog.id} dog={dog}/>
-                ))}
             </div>
         </div>
     )

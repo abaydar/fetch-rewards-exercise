@@ -36,19 +36,21 @@ const Favorites = () => {
     }, [favorites])
 
     return (
-        <>
-            <h2>Favorite Dogs</h2>
+        <div className="p-4 space-y-4">
+            <h2 className="text-2xl font-semibold">Favorite Dogs</h2>
             <Button
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                 onClick={() => generateMatch(dogIds)}
             >Generate Match</Button>
-            {favorites.length ? (
-                favorites.map((dog) => (
-                    <DogCard key={dog.id} dog={dog} hideRemoveBtn={true}/>
-            ))
-            ):(
-                <p>No Favorites yet</p>
-            )
-            }
+            <div className="m-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {favorites.length ? (
+                    favorites.map((dog) => (
+                        <DogCard key={dog.id} dog={dog} hideRemoveBtn={true}/>
+                    ))
+                ):(
+                    <p>No Favorites yet</p>
+                )}
+            </div>
             {matchedDog && (
                 <Dialog.Root open={true} onOpenChange={() => setMatchedDog(null)}>
                     <Dialog.Trigger asChild>
@@ -73,7 +75,7 @@ const Favorites = () => {
                     </Dialog.Portal>
                 </Dialog.Root>
             )}
-        </>
+        </div>
     )
 }
 
