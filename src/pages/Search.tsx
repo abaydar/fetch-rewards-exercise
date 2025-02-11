@@ -1,7 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import DogCard from "../components/DogCard";
-import { Button } from "@radix-ui/themes";
 
 export interface Dog {
     id: string;
@@ -121,7 +120,7 @@ const Search = () => {
             </div>
 
             <div className="flex items-center justify-center gap-4">
-                <Button
+                <button
                     onClick={(() => setPageNum((currPageNum) => currPageNum - 1))}
                     disabled={pageNum === 1}
                     className={`px-4 py-2 rounded-md ${
@@ -131,14 +130,14 @@ const Search = () => {
                     }`}
                 >
                     Previous
-                </Button>
+                </button>
                     <span className="font-semibold">{pageNum}</span>
-                <Button
+                <button
                     onClick={() => setPageNum((currPageNum) => currPageNum + 1)}
                     className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
                 >
                     Next
-                </Button>
+                </button>
             </div>
         </div>
     )
