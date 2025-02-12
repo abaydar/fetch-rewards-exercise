@@ -7,6 +7,7 @@
   - Start development server
     - `npm run dev`
 
+- Hosted at [**abaydar-fetch-rewards**](https://abaydar-fetch-rewards.netlify.app/)
 
 ## How it works
 
